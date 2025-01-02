@@ -1,0 +1,32 @@
+
+services:
+  moodle:
+    image: bitnami/moodle:latest
+    restart: always
+    ports:
+      - "8080:8080"  # Expose port 8080 for browser access
+    environment:
+      MOODLE_DB_TYPE: pgsql
+      MOODLE_DB_HOST: db
+      MOODLE_DB_NAME: moodle
+      MOODLE_DB_USER: moodleuser
+      MOODLE_DB_PASSWORD: moodlepassword
+      MOODLE_ADMIN_PASSWORD: adminpassword
+    volumes:
+      - moodledata:/bitnami/moodle
+    depends_on:
+      - db
+
+  db:
+    image: bitnami/postgresql:latest
+    restart: always
+    environment:
+      POSTGRES_DB: moodle
+      POSTGRES_USER: moodleuser
+      POSTGRES_PASSWORD: moodlepassword
+    volumes:
+      - moodledb:/bitnami/postgresql
+
+volumes:
+  moodledata:
+  moodledb:
